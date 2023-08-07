@@ -9,7 +9,7 @@ using Openfort;
 public class LoginSceneManager : MonoBehaviour
 {
     // Reference to our Authentication service
-    OpenfortAuth authClient = new OpenfortAuth("YOUR_PUBLISHABLE_KEY");
+    OpenfortAuth authClient = new OpenfortAuth("pk_test_9b35edfd-f40b-527f-a5ff-7ed129cfe454", "http://localhost:3000");
 
     [Header("Login")]
     public GameObject loginPanel;
@@ -100,7 +100,11 @@ public class LoginSceneManager : MonoBehaviour
         }
 
         statusTextLabel.text = $"Registering User {username.text} ...";
-        var signupResponse = await authClient.Signup(username.text, password.text, username.text);
+        Openfort.Model.AuthResponse signupResponse = await authClient.Signup(username.text, password.text, username.text);
+
+        statusTextLabel.text = $"Logged In As {username.text}";
+        playerLabel.text = $"Player: {signupResponse.PlayerId}";
+
         Debug.Log(signupResponse);
         registerPanel.SetActive(false);
         loggedinPanel.SetActive(true);
@@ -129,7 +133,7 @@ public class LoginSceneManager : MonoBehaviour
     {
         Openfort.Model.AuthResponse token = await authClient.GetTokenAfterGoogleSignin();
         Debug.Log(token);
-        statusTextLabel.text = $"Logged In As {username.text}";
+        statusTextLabel.text = $"Logged In With Google";
         playerLabel.text = $"Player: {token.PlayerId}";
         CancelInvoke();
         loginPanel.SetActive(false);
