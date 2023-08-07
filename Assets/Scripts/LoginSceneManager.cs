@@ -134,7 +134,8 @@ public class LoginSceneManager : MonoBehaviour
         username.text = string.Empty;
         password.text = string.Empty;
         confirmPassword.text = string.Empty;
-
+        // Reset logged in player label
+        playerLabel.text = string.Empty;
         // Reset status text
         statusTextLabel.text = string.Empty;
     }
