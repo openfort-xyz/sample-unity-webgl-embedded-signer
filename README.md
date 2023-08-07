@@ -1,19 +1,6 @@
 # Authentication in Unity
 
-NextAuth.js is a complete open-source authentication solution.
-
-This is an example application that shows how `next-auth` is applied to a basic Next.js app with Openfort.
-
-
-## Demo
-
-- [Video walkthrough](https://youtu.be/xBzl8hk__P8)
-- [Live demo](https://sample-ssv-social-nextjs.vercel.app/)
-
-This demo authenticates a player using NextAuth. It will create a custodial account for the player and collect an asset with it. Then, it transfers the account ownership from a Openfort custodial to a self-custodial account.
-
-When running the application, after you log in, head to `/protected` route to see the demo in action.
-
+...
 
 ## Features
 
