@@ -71,12 +71,21 @@ public class LoginSceneManager : MonoBehaviour
         }
         statusTextLabel.text = $"Logging In As {username.text} ...";
 
-        loginPanel.SetActive(false);
-        OpenfortAuth authClient = new OpenfortAuth("pk_test_9b35edfd-f40b-527f-a5ff-7ed129cfe454", "http://localhost:3000");
+        try
+        {
+            Openfort.Model.AuthResponse loginResponse = await authClient.Login(username.text, password.text);
+            loginPanel.SetActive(false);
+            statusTextLabel.text = $"Logged In As {username.text}";
+            playerLabel.text = $"Player: {loginResponse.PlayerId}";
 
-        var loginResponse = await authClient.Login(username.text, password.text);
-        Debug.Log(loginResponse);
-        loggedinPanel.SetActive(true);
+            loggedinPanel.SetActive(true);
+        }
+        catch (System.Exception)
+        {
+            loginPanel.SetActive(false);
+            registerPanel.SetActive(true);
+        }
+
     }
 
     /// <summary>
@@ -90,11 +99,11 @@ public class LoginSceneManager : MonoBehaviour
             return;
         }
 
-        registerPanel.SetActive(false);
         statusTextLabel.text = $"Registering User {username.text} ...";
         var signupResponse = await authClient.Signup(username.text, password.text, username.text);
         Debug.Log(signupResponse);
-        loggedinPanel.SetActive(false);
+        registerPanel.SetActive(false);
+        loggedinPanel.SetActive(true);
     }
 
     /// <summary>
@@ -120,7 +129,8 @@ public class LoginSceneManager : MonoBehaviour
     {
         Openfort.Model.AuthResponse token = await authClient.GetTokenAfterGoogleSignin();
         Debug.Log(token);
-        playerLabel.text = $"Logged In As {token.PlayerId}";
+        statusTextLabel.text = $"Logged In As {username.text}";
+        playerLabel.text = $"Player: {token.PlayerId}";
         CancelInvoke();
         loginPanel.SetActive(false);
         registerPanel.SetActive(false);
