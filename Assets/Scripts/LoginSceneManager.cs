@@ -9,7 +9,7 @@ using Openfort;
 public class LoginSceneManager : MonoBehaviour
 {
     // Reference to our Authentication service
-    OpenfortAuth authClient = new OpenfortAuth("pk_test_9b35edfd-f40b-527f-a5ff-7ed129cfe454", "http://localhost:3000");
+    OpenfortAuth authClient = new OpenfortAuth("YOUR_PUBLISHABLE_KEY");
 
     [Header("Login")]
     public GameObject loginPanel;
