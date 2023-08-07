@@ -1,7 +1,11 @@
 # Authentication in Unity
 
 Showcase of email & password and Google OAuth:
-[authentication-unity.mp4](https://blog-cms.openfort.xyz/uploads/authentication_unity_7af75625db.mp4)
+
+<video width="560" height="315" controls>
+<source src="https://blog-cms.openfort.xyz/uploads/authentication_unity_7af75625db.mp4" type="video/mp4">
+</video>
+
 ## Features
 
 - 🏰 Openfort Authentication.
