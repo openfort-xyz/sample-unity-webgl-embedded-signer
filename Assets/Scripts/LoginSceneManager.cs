@@ -20,6 +20,10 @@ public class LoginSceneManager : MonoBehaviour
     public GameObject registerPanel;
     public InputField confirmPassword;
 
+    [Header("LoggedIn")]
+    public GameObject loggedinPanel;
+    public Text playerLabel;
+
     [Header("General")]
     public Text statusTextLabel;
 
@@ -30,6 +34,7 @@ public class LoginSceneManager : MonoBehaviour
     {
         // Hide all our panels until we know what UI to display
         registerPanel.SetActive(false);
+        loggedinPanel.SetActive(false);
         loginPanel.SetActive(true);
 
     }
@@ -43,13 +48,18 @@ public class LoginSceneManager : MonoBehaviour
 
     public async void OnGoogleClicked()
     {
-
         var getGoogleLink = await authClient.GetGoogleSigninUrl();
         Debug.Log(getGoogleLink);
         Application.OpenURL(getGoogleLink);
 
         InvokeRepeating("CheckToken", 2f, 1f);
+    }
 
+    public async void OnLogoutClicked()
+    {
+        authClient.Logout();
+        loginPanel.SetActive(true);
+        loggedinPanel.SetActive(false);
     }
 
     public async void OnLoginClicked()
@@ -66,9 +76,7 @@ public class LoginSceneManager : MonoBehaviour
 
         var loginResponse = await authClient.Login(username.text, password.text);
         Debug.Log(loginResponse);
-        // _authService.Email = username.text;
-        // _authService.Password = password.text;
-        // _authService.Authenticate(_currentAuthType);
+        loggedinPanel.SetActive(true);
     }
 
     /// <summary>
@@ -84,13 +92,9 @@ public class LoginSceneManager : MonoBehaviour
 
         registerPanel.SetActive(false);
         statusTextLabel.text = $"Registering User {username.text} ...";
-        OpenfortAuth authClient = new OpenfortAuth("pk_test_9b35edfd-f40b-527f-a5ff-7ed129cfe454", "http://localhost:3000");
-
         var signupResponse = await authClient.Signup(username.text, password.text, username.text);
         Debug.Log(signupResponse);
-        // _authService.Email = username.text;
-        // _authService.Password = password.text;
-        // _authService.Authenticate(_currentAuthType);
+        loggedinPanel.SetActive(false);
     }
 
     /// <summary>
@@ -101,30 +105,26 @@ public class LoginSceneManager : MonoBehaviour
     {
         ResetFormsAndStatusLabel();
 
-        // Show panels
         registerPanel.SetActive(false);
         loginPanel.SetActive(true);
     }
 
     public void OnBackToLoginClicked()
     {
-        // We don't use it for the moment, can bring problems.
-
         ResetFormsAndStatusLabel();
-
         loginPanel.SetActive(true);
-
-
-
-        // Logout from PlayFab
-        //TODO
     }
+
 
     private async void CheckToken()
     {
-        var token = await authClient.GetTokenAfterGoogleSignin();
+        Openfort.Model.AuthResponse token = await authClient.GetTokenAfterGoogleSignin();
         Debug.Log(token);
+        playerLabel.text = $"Logged In As {token.PlayerId}";
         CancelInvoke();
+        loginPanel.SetActive(false);
+        registerPanel.SetActive(false);
+        loggedinPanel.SetActive(true);
     }
 
 
