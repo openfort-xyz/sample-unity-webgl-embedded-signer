@@ -9,6 +9,7 @@ using Openfort;
 public class LoginSceneManager : MonoBehaviour
 {
     // Reference to our Authentication service
+    OpenfortAuth authClient = new OpenfortAuth("pk_test_9b35edfd-f40b-527f-a5ff-7ed129cfe454", "http://localhost:3000");
 
     [Header("Login")]
     public GameObject loginPanel;
@@ -24,7 +25,6 @@ public class LoginSceneManager : MonoBehaviour
 
     #region UNITY_LIFECYCLE
 
-    OpenfortAuth authClient = new OpenfortAuth("pk_test_a3ea62f7-52b4-4a08-85be-1b2780302134", "http://localhost:3000");
 
     private void Start()
     {
@@ -40,7 +40,19 @@ public class LoginSceneManager : MonoBehaviour
     /// Login Button means they've selected to submit a username (email) / password combo
     /// Note: in this flow if no account is found, it will ask them to register.
     /// </summary>
-    public void OnLoginClicked()
+
+    public async void OnGoogleClicked()
+    {
+
+        var getGoogleLink = await authClient.GetGoogleSigninUrl();
+        Debug.Log(getGoogleLink);
+        Application.OpenURL(getGoogleLink);
+
+        InvokeRepeating("CheckToken", 2f, 1f);
+
+    }
+
+    public async void OnLoginClicked()
     {
         if (string.IsNullOrEmpty(username.text) || string.IsNullOrEmpty(password.text))
         {
@@ -50,6 +62,7 @@ public class LoginSceneManager : MonoBehaviour
         statusTextLabel.text = $"Logging In As {username.text} ...";
 
         loginPanel.SetActive(false);
+        OpenfortAuth authClient = new OpenfortAuth("pk_test_9b35edfd-f40b-527f-a5ff-7ed129cfe454", "http://localhost:3000");
 
         var loginResponse = await authClient.Login(username.text, password.text);
         Debug.Log(loginResponse);
@@ -61,7 +74,7 @@ public class LoginSceneManager : MonoBehaviour
     /// <summary>
     /// No account was found, and they have selected to register a username (email) / password combo.
     /// </summary>
-    public void OnRegisterButtonClicked()
+    public async void OnRegisterButtonClicked()
     {
         if (password.text != confirmPassword.text)
         {
@@ -71,8 +84,9 @@ public class LoginSceneManager : MonoBehaviour
 
         registerPanel.SetActive(false);
         statusTextLabel.text = $"Registering User {username.text} ...";
+        OpenfortAuth authClient = new OpenfortAuth("pk_test_9b35edfd-f40b-527f-a5ff-7ed129cfe454", "http://localhost:3000");
 
-        var signupResponse = await authClient.Signup(username.text, password.text);
+        var signupResponse = await authClient.Signup(username.text, password.text, username.text);
         Debug.Log(signupResponse);
         // _authService.Email = username.text;
         // _authService.Password = password.text;
@@ -105,6 +119,14 @@ public class LoginSceneManager : MonoBehaviour
         // Logout from PlayFab
         //TODO
     }
+
+    private async void CheckToken()
+    {
+        var token = await authClient.GetTokenAfterGoogleSignin();
+        Debug.Log(token);
+        CancelInvoke();
+    }
+
 
     private void ResetFormsAndStatusLabel()
     {
