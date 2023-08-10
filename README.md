@@ -32,7 +32,9 @@ OpenfortAuth authClient = new OpenfortAuth("YOUR_PUBLISHABLE_KEY");
 
 **2. Configure Authentication Providers**
 
-Coming soon.
+From your Openfort dashboard, head to [Player Authentication](https://dashboard.openfort.xyz/players/auth/providers) and enable the Google provider.
+
+![config-provider.png](https://blog-cms.openfort.xyz/uploads/config_provider_224c6c1dc8.png)
 
 
 ## Get support
