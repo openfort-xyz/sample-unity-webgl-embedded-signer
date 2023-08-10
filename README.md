@@ -2,7 +2,9 @@
 
 Showcase of email & password and Google OAuth:
 
-https://github.com/openfort-xyz/authentication-unity-sample/assets/22459423/e7fd8935-aa1b-4b08-bc5a-e468cbd0282e
+<video width="560" height="315" controls>
+<source src="https://blog-cms.openfort.xyz/uploads/authentication_unity_7af75625db.mp4" type="video/mp4">
+</video>
 
 ## Features
 
