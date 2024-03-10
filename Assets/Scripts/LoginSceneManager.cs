@@ -5,15 +5,16 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Openfort;
-
+using Openfort.Model;
+using Openfort.Recovery;
 public class LoginSceneManager : MonoBehaviour
 {
     // Reference to our Authentication service
-    OpenfortAuth authClient = new OpenfortAuth("pk_test_f7ed461d-fcf8-58d3-8fce-d53d07932f1d");
+    private OpenfortSDK Openfort = new OpenfortSDK("pk_live_c7c28825-d406-5f6d-8a7f-0395e3796416");
 
     [Header("Login")]
     public GameObject loginPanel;
-    public InputField username;
+    public InputField email;
     public InputField password;
 
     [Header("Register")]
@@ -42,41 +43,47 @@ public class LoginSceneManager : MonoBehaviour
 
     #region PUBLIC_BUTTON_METHODS
     /// <summary>
-    /// Login Button means they've selected to submit a username (email) / password combo
+    /// Login Button means they've selected to submit a email (email) / password combo
     /// Note: in this flow if no account is found, it will ask them to register.
     /// </summary>
 
-    public async void OnGoogleClicked()
-    {
-        var getGoogleLink = await authClient.GetGoogleSigninUrl();
-        Debug.Log(getGoogleLink);
-        Application.OpenURL(getGoogleLink);
+    // public async void OnGoogleClicked()
+    // {
+    //     var getGoogleLink = await Openfort.GetGoogleSigninUrl();
+    //     Debug.Log(getGoogleLink);
+    //     Application.OpenURL(getGoogleLink);
 
-        InvokeRepeating("CheckToken", 2f, 1f);
-    }
+    // }
 
     public async void OnLogoutClicked()
     {
-        authClient.Logout();
+        // Openfort.Logout();
         loginPanel.SetActive(true);
         loggedinPanel.SetActive(false);
     }
 
     public async void OnLoginClicked()
     {
-        if (string.IsNullOrEmpty(username.text) || string.IsNullOrEmpty(password.text))
+        if (string.IsNullOrEmpty(email.text) || string.IsNullOrEmpty(password.text))
         {
-            statusTextLabel.text = "Please provide a correct username/password";
+            statusTextLabel.text = "Please provide a correct email/password";
             return;
         }
-        statusTextLabel.text = $"Logging In As {username.text} ...";
+        statusTextLabel.text = $"Logging In As {email.text} ...";
 
         try
         {
-            Openfort.Model.AuthResponse loginResponse = await authClient.Login(username.text, password.text);
+            string token = await Openfort.LoginWithEmailPassword(email.text, password.text);
+            try
+            {
+                Openfort.ConfigureEmbeddedSigner(80001);
+            }
+            catch (MissingRecoveryMethod)
+            {
+                await Openfort.ConfigureEmbeddedRecovery(new PasswordRecovery("secret"));
+            }
             loginPanel.SetActive(false);
-            statusTextLabel.text = $"Logged In As {username.text}";
-            playerLabel.text = $"Player: {loginResponse.PlayerId}";
+            statusTextLabel.text = $"Logged In As {email.text}";
 
             loggedinPanel.SetActive(true);
         }
@@ -89,7 +96,7 @@ public class LoginSceneManager : MonoBehaviour
     }
 
     /// <summary>
-    /// No account was found, and they have selected to register a username (email) / password combo.
+    /// No account was found, and they have selected to register a email (email) / password combo.
     /// </summary>
     public async void OnRegisterButtonClicked()
     {
@@ -99,13 +106,19 @@ public class LoginSceneManager : MonoBehaviour
             return;
         }
 
-        statusTextLabel.text = $"Registering User {username.text} ...";
-        Openfort.Model.AuthResponse signupResponse = await authClient.Signup(username.text, password.text, username.text);
+        statusTextLabel.text = $"Registering User {email.text} ...";
+        string token = await Openfort.SignUpWithEmailPassword(email.text, password.text);
+        try
+        {
+            Openfort.ConfigureEmbeddedSigner(80001);
+        }
+        catch (MissingRecoveryMethod)
+        {
+            await Openfort.ConfigureEmbeddedRecovery(new PasswordRecovery("secret"));
+        }
+        statusTextLabel.text = $"Logged In As {email.text}";
 
-        statusTextLabel.text = $"Logged In As {username.text}";
-        playerLabel.text = $"Player: {signupResponse.PlayerId}";
-
-        Debug.Log(signupResponse);
+        Debug.Log(token);
         registerPanel.SetActive(false);
         loggedinPanel.SetActive(true);
     }
@@ -129,23 +142,23 @@ public class LoginSceneManager : MonoBehaviour
     }
 
 
-    private async void CheckToken()
-    {
-        Openfort.Model.AuthResponse token = await authClient.GetTokenAfterGoogleSignin();
-        Debug.Log(token);
-        statusTextLabel.text = $"Logged In With Google";
-        playerLabel.text = $"Player: {token.PlayerId}";
-        CancelInvoke();
-        loginPanel.SetActive(false);
-        registerPanel.SetActive(false);
-        loggedinPanel.SetActive(true);
-    }
+    // private async void CheckToken()
+    // {
+    //     Openfort.Model.AuthResponse token = await Openfort.GetTokenAfterGoogleSignin();
+    //     Debug.Log(token);
+    //     statusTextLabel.text = $"Logged In With Google";
+    //     playerLabel.text = $"Player: {token.PlayerId}";
+    //     CancelInvoke();
+    //     loginPanel.SetActive(false);
+    //     registerPanel.SetActive(false);
+    //     loggedinPanel.SetActive(true);
+    // }
 
 
     private void ResetFormsAndStatusLabel()
     {
         // Reset all forms
-        username.text = string.Empty;
+        email.text = string.Empty;
         password.text = string.Empty;
         confirmPassword.text = string.Empty;
         // Reset logged in player label

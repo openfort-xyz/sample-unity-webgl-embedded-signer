@@ -1540,7 +1540,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loginPanel: {fileID: 1079474619}
-  username: {fileID: 526539801}
+  email: {fileID: 526539801}
   password: {fileID: 1512064295}
   registerPanel: {fileID: 1405146845}
   confirmPassword: {fileID: 339457008}
