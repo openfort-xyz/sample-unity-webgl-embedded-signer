@@ -10,7 +10,8 @@ using Openfort.Recovery;
 public class LoginSceneManager : MonoBehaviour
 {
     // Reference to our Authentication service
-    private OpenfortSDK Openfort = new OpenfortSDK("pk_live_c7c28825-d406-5f6d-8a7f-0395e3796416");
+    private string key;
+    private OpenfortSDK Openfort = new OpenfortSDK("pk_test_505bc088-905e-5a43-b60b-4c37ed1f887a");
 
     [Header("Login")]
     public GameObject loginPanel;
@@ -47,13 +48,14 @@ public class LoginSceneManager : MonoBehaviour
     /// Note: in this flow if no account is found, it will ask them to register.
     /// </summary>
 
-    // public async void OnGoogleClicked()
-    // {
-    //     var getGoogleLink = await Openfort.GetGoogleSigninUrl();
-    //     Debug.Log(getGoogleLink);
-    //     Application.OpenURL(getGoogleLink);
+    public async void OnGoogleClicked()
+    {
+        OAuthInitResponse initAuthResponse = await Openfort.InitOAuth(OAuthProvider.Google);
+        key = initAuthResponse.Key;
+        Application.OpenURL(initAuthResponse.Url);
+        InvokeRepeating("CheckToken", 2f, 1f);
 
-    // }
+    }
 
     public async void OnLogoutClicked()
     {
@@ -118,7 +120,6 @@ public class LoginSceneManager : MonoBehaviour
         }
         statusTextLabel.text = $"Logged In As {email.text}";
 
-        Debug.Log(token);
         registerPanel.SetActive(false);
         loggedinPanel.SetActive(true);
     }
@@ -142,17 +143,16 @@ public class LoginSceneManager : MonoBehaviour
     }
 
 
-    // private async void CheckToken()
-    // {
-    //     Openfort.Model.AuthResponse token = await Openfort.GetTokenAfterGoogleSignin();
-    //     Debug.Log(token);
-    //     statusTextLabel.text = $"Logged In With Google";
-    //     playerLabel.text = $"Player: {token.PlayerId}";
-    //     CancelInvoke();
-    //     loginPanel.SetActive(false);
-    //     registerPanel.SetActive(false);
-    //     loggedinPanel.SetActive(true);
-    // }
+    private async void CheckToken()
+    {
+        string token = await Openfort.AuthenticateWithOAuth(OAuthProvider.Google, key);
+        statusTextLabel.text = $"Logged In With Google";
+        playerLabel.text = $"Player logged in";
+        CancelInvoke();
+        loginPanel.SetActive(false);
+        registerPanel.SetActive(false);
+        loggedinPanel.SetActive(true);
+    }
 
 
     private void ResetFormsAndStatusLabel()
