@@ -235,7 +235,7 @@ public class LoginSceneManager : MonoBehaviour
     {
         loadingPanel.SetActive(true);
         mintButton.interactable = false;
-        var webRequest = UnityWebRequest.Post("http://192.168.0.20:4000/mint", "");
+        var webRequest = UnityWebRequest.Post("descriptive-night-production.up.railway.app/mint", "");
         webRequest.SetRequestHeader("Authorization", "Bearer " + AccessToken);
         webRequest.SetRequestHeader("Content-Type", "application/json");
         webRequest.SetRequestHeader("Accept", "application/json");
