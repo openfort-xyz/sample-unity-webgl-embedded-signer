@@ -1,4 +1,4 @@
-# Authentication in Unity
+# Embedded Smart Account in Unity
 
 Showcase of email & password and Google OAuth:
 
@@ -8,8 +8,10 @@ Showcase of email & password and Google OAuth:
 
 ## Features
 
-- 🏰 Openfort Authentication.
+- 🏰 Openfort Authentication + embedded signer
 - 🏰 [Openfort CSharp Unity SDK](https://github.com/openfort-xyz/openfort-csharp-unity).
+- 🏰 [Openfort Node SDK](https://www.npmjs.com/package/@openfort/openfort-node).
+
 
 ## How to run locally
 
@@ -17,7 +19,7 @@ Showcase of email & password and Google OAuth:
 
 ```
 git clone https://github.com/openfort-xyz/samples
-cd authentication-unity-sample
+cd sample-unity-auth-embedded-signer
 ```
 
 

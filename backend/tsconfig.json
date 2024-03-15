@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES6",                           // Specify ECMAScript target version
+    "module": "commonjs",                      // Specify module code generation
+    "lib": ["ES6"],                            // Specify a list of library files to be included in the compilation
+    "outDir": "./dist",                        // Redirect output structure to the directory
+    "rootDir": "./src",                        // Specify the root directory of input files
+    "strict": true,                            // Enable all strict type-checking options
+    "esModuleInterop": true,                   // Enables __importDefault interoperability between CommonJS and ES Modules
+    "experimentalDecorators": true,            // Enable experimental support for TC39 decorators
+    "emitDecoratorMetadata": true              // Emit design-type metadata for decorated declarations in source
+  },
+  "include": ["src/**/*"],                     // Include all files in the src directory
+  "exclude": ["node_modules", "**/*.spec.ts"]  // Exclude node_modules and test files
+}
