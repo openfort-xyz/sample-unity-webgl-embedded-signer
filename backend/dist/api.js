@@ -17,7 +17,7 @@ class MintController {
     }
     run(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const openfort = new Openfort("sk_test_56a20ed7-2d0a-54a7-bf4e-6dad32b8aadd");
+            const openfort = new Openfort(process.env.OPENFORT_SECRET_KEY);
             const auth = req.headers.authorization;
             if (!auth) {
                 return res.status(401).json({ error: "No authorization header" });
@@ -33,7 +33,6 @@ class MintController {
             const policy_id = "pol_0b74cbac-146b-4a1e-98e1-66e83aef5deb";
             const contract_id = "con_42883506-04d5-408e-93da-2151e293a82b";
             const chainId = 80001;
-            const optimistic = true;
             const interaction_mint = {
                 contract: contract_id,
                 functionName: "mint",
@@ -45,7 +44,6 @@ class MintController {
                     player: player.playerId,
                     policy: policy_id,
                     chainId,
-                    optimistic,
                     interactions: [interaction_mint],
                 });
                 console.log("transactionIntent", transactionIntent);
