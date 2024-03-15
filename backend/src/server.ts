@@ -16,6 +16,9 @@ if (!process.env.OPENFORT_SECRET_KEY) {
     );
   }
 
+app.get("/", (req, res) => {
+  res.send("Service is running");
+});
 app.post('/mint', new MintController().run);
 app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);
