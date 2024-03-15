@@ -51,6 +51,3 @@ backend/node_modules/
 
 # editor
 backend/.idea/
-
-# build
-backend/dist/
