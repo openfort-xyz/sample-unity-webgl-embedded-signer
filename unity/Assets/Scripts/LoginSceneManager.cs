@@ -196,7 +196,7 @@ public class LoginSceneManager : MonoBehaviour
 
     private async void CheckToken()
     {
-        AccessToken = await Openfort.AuthenticateWithOAuth(OAuthProvider.Google, key);
+        AccessToken = await Openfort.AuthenticateWithOAuth(OAuthProvider.Google, key, TokenType.CustomToken);
         try
         {
             Openfort.ConfigureEmbeddedSigner(80001);
