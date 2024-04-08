@@ -10,12 +10,14 @@ using Openfort;
 using Openfort.Model;
 using Openfort.Recovery;
 using Newtonsoft.Json;
+using static Clients.Shield;
+
 public class LoginSceneManager : MonoBehaviour
 {
     // Reference to our Authentication service
-    private string AccessToken;
+    private AuthResponse AccessToken;
     private string key;
-    private OpenfortSDK Openfort = new OpenfortSDK("pk_test_505bc088-905e-5a43-b60b-4c37ed1f887a");
+    private OpenfortSDK Openfort = new OpenfortSDK("pk_test_505bc088-905e-5a43-b60b-4c37ed1f887a", "a4b75269-65e7-49c4-a600-6b5d9d6eec66", "/cC/ElEv1bCHxvbE/UUH+bLIf8nSLZOrxj8TkKChiY4=");
     [Header("Loading")]
     public GameObject loadingPanel;
 
@@ -74,6 +76,15 @@ public class LoginSceneManager : MonoBehaviour
 
     }
 
+    private async Task SetAutomaticRecoveryMethod(AuthResponse authResponse)
+    {
+        int chainId = 80001;
+        OpenfortAuthOptions shieldConfig = new OpenfortAuthOptions
+        { authProvider = ShieldAuthProvider.Openfort, openfortOAuthProvider = OpenfortOAuthProvider.None, openfortOAuthToken = authResponse.Token, openfortOAuthTokenType = OpenfortOAuthTokenType.None };
+
+        await Openfort.ConfigureEmbeddedSigner(chainId, shieldConfig);
+    }
+
     public void LogoutClicked()
     {
         loadingPanel.SetActive(true);
@@ -122,14 +133,7 @@ public class LoginSceneManager : MonoBehaviour
         try
         {
             AccessToken = await Openfort.LoginWithEmailPassword(email.text, password.text);
-            try
-            {
-                Openfort.ConfigureEmbeddedSigner(80001);
-            }
-            catch (MissingRecoveryMethod)
-            {
-                await Openfort.ConfigureEmbeddedRecovery(new PasswordRecovery("secret"));
-            }
+            await SetAutomaticRecoveryMethod(AccessToken);
             loginPanel.SetActive(false);
             statusTextLabel.text = $"Logged In As {email.text}";
 
@@ -159,14 +163,7 @@ public class LoginSceneManager : MonoBehaviour
 
         statusTextLabel.text = $"Registering User {email.text} ...";
         AccessToken = await Openfort.SignUpWithEmailPassword(email.text, password.text);
-        try
-        {
-            Openfort.ConfigureEmbeddedSigner(80001);
-        }
-        catch (MissingRecoveryMethod)
-        {
-            await Openfort.ConfigureEmbeddedRecovery(new PasswordRecovery("secret"));
-        }
+        await SetAutomaticRecoveryMethod(AccessToken);
         statusTextLabel.text = $"Logged In As {email.text}";
 
         registerPanel.SetActive(false);
@@ -197,16 +194,9 @@ public class LoginSceneManager : MonoBehaviour
     private async void CheckToken()
     {
         AccessToken = await Openfort.AuthenticateWithOAuth(OAuthProvider.Google, key, TokenType.CustomToken);
-        try
-        {
-            Openfort.ConfigureEmbeddedSigner(80001);
-        }
-        catch (MissingRecoveryMethod)
-        {
-            await Openfort.ConfigureEmbeddedRecovery(new PasswordRecovery("secret"));
-        }
+        await SetAutomaticRecoveryMethod(AccessToken);
         statusTextLabel.text = $"Logged In With Google";
-        playerLabel.text = $"Player logged in";
+        // playerLabel.text = $"Player logged in";
         CancelInvoke();
         loginPanel.SetActive(false);
         registerPanel.SetActive(false);
@@ -235,8 +225,8 @@ public class LoginSceneManager : MonoBehaviour
     {
         loadingPanel.SetActive(true);
         mintButton.interactable = false;
-        var webRequest = UnityWebRequest.Post("https://descriptive-night-production.up.railway.app/mint", "");
-        webRequest.SetRequestHeader("Authorization", "Bearer " + AccessToken);
+        var webRequest = UnityWebRequest.PostWwwForm("https://descriptive-night-production.up.railway.app/mint", "");
+        webRequest.SetRequestHeader("Authorization", "Bearer " + AccessToken.Token);
         webRequest.SetRequestHeader("Content-Type", "application/json");
         webRequest.SetRequestHeader("Accept", "application/json");
         await SendWebRequestAsync(webRequest);
@@ -259,7 +249,7 @@ public class LoginSceneManager : MonoBehaviour
             return;
         }
 
-        var nextAction = responseJson.Data.NextAction.Payload.UserOpHash;
+        var nextAction = responseJson.Data.NextAction.Payload.UserOperationHash;
 
         Debug.Log("Next Action: " + nextAction);
         var intentResponse = await Openfort.SendSignatureTransactionIntentRequest(id, nextAction);
