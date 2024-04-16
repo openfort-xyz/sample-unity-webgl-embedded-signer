@@ -78,7 +78,7 @@ public class LoginSceneManager : MonoBehaviour
 
     private async Task SetAutomaticRecoveryMethod(AuthResponse authResponse)
     {
-        int chainId = 80001;
+        int chainId = 80002;
         OpenfortAuthOptions shieldConfig = new OpenfortAuthOptions
         { authProvider = ShieldAuthProvider.Openfort, openfortOAuthProvider = OpenfortOAuthProvider.None, openfortOAuthToken = authResponse.Token, openfortOAuthTokenType = OpenfortOAuthTokenType.None };
 
@@ -260,7 +260,7 @@ public class LoginSceneManager : MonoBehaviour
     }
     public void OpenLink()
     {
-        Application.OpenURL("https://mumbai.polygonscan.com/tx/" + transactionHash);
+        Application.OpenURL("https://www.oklink.com/amoy/tx/" + transactionHash);
     }
     private Task SendWebRequestAsync(UnityWebRequest webRequest)
     {

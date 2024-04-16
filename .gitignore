@@ -28,6 +28,7 @@ unity/*.apk
 unity/*.aab
 unity/*.unitypackage
 unity/*.app
+unity/.vscode
 
 # Crashlytics generated file
 unity/crashlytics-build.properties
