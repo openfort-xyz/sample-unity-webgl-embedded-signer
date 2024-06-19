@@ -48,7 +48,8 @@ class MintController {
                 });
                 console.log("transactionIntent", transactionIntent);
                 return res.send({
-                    data: transactionIntent,
+                    transactionIntentId: transactionIntent.id,
+                    userOperationHash: transactionIntent.userOperationHash,
                 });
             }
             catch (e) {
