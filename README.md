@@ -27,10 +27,6 @@ You will need an Openfort account in order to run the demo. Once you set up your
 
 Then, navigate to `Assets/Scripts/LoginSceneManager.cs` and replace `YOUR_PUBLISHABLE_KEY` the following values with your own:
 
-```csharp
-OpenfortAuth authClient = new OpenfortAuth("YOUR_PUBLISHABLE_KEY");
-```
-
 
 **2. Configure Authentication Providers**
 
