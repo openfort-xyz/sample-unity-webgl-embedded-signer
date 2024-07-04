@@ -13,28 +13,6 @@ Showcase of email & password and Google OAuth:
 - 🏰 [Openfort Node SDK](https://www.npmjs.com/package/@openfort/openfort-node).
 
 
-## How to run locally
-
-**1. Clone and configure the sample**
-
-```
-git clone https://github.com/openfort-xyz/samples
-cd sample-unity-auth-embedded-signer
-```
-
-
-You will need an Openfort account in order to run the demo. Once you set up your account, go to the Openfort [developer dashboard](https://dashboard.openfort.xyz/apikeys) to find your API keys.
-
-Then, navigate to `Assets/Scripts/LoginSceneManager.cs` and replace `YOUR_PUBLISHABLE_KEY` the following values with your own:
-
-
-**2. Configure Authentication Providers**
-
-From your Openfort dashboard, head to [Player Authentication](https://dashboard.openfort.xyz/players/auth/providers) and enable the Google provider.
-
-![config-provider.png](https://blog-cms.openfort.xyz/uploads/config_provider_224c6c1dc8.png)
-
-
 ## Get support
 If you found a bug or want to suggest a new [feature/use case/sample], please [file an issue](../../issues).
 
