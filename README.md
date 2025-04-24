@@ -1,4 +1,4 @@
-# Invisible wallets in Unity
+# Invisible wallets in WebGL
 
 Showcase of email & password and Google OAuth:
 
