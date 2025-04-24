@@ -1,4 +1,4 @@
-# Embedded Smart Account in Unity
+# Invisible wallets in Unity
 
 Showcase of email & password and Google OAuth:
 
@@ -8,13 +8,12 @@ Showcase of email & password and Google OAuth:
 
 ## Features
 
-- 🏰 Openfort Authentication + embedded signer
+- 🏰 [Authentication + wallet](https://www.openfort.io/docs/products/embedded-wallet/unity)
 - 🏰 [Openfort CSharp Unity SDK](https://github.com/openfort-xyz/openfort-csharp-unity).
 - 🏰 [Openfort Node SDK](https://www.npmjs.com/package/@openfort/openfort-node).
 
 
 ## Get support
-If you found a bug or want to suggest a new [feature/use case/sample], please [file an issue](../../issues).
 
 If you have questions, comments, or need help with code, we're here to help:
 - on Twitter at [@openfortxyz](https://twitter.com/openfort_hq)
