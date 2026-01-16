@@ -16,5 +16,5 @@ Showcase of email & password and Google OAuth:
 ## Get support
 
 If you have questions, comments, or need help with code, we're here to help:
-- on Twitter at [@openfortxyz](https://twitter.com/openfort_hq)
+- on Twitter at [@openfort](https://twitter.com/openfort_hq)
 - by [email](mailto:support+github@openfort.xyz)
